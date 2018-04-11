@@ -33,7 +33,8 @@ In order to deploy this project, you'll need to spin up multiple pieces of infra
       - **ElastiCache Redis**:  using the ElastiCache console, create a one-node Redis cluster.  For testing purposes, you can set the instance type and size to ```cache.t2.micro```.  Make a note of the Primary Endpoint URL after creation.  
       - **DynamoDB**:  using the DynamoDB console, create a table named ```VisualSearchFeatures```.  Set the table's Partition key to be a String named **id**.  
      
-3.  **API and Search Lambda function setup**:  To create and deploy these Lambda functions, it is recommended to use the AWS Cloud9 IDE for ease of use and its built-in management capabilities for serverless applications.
+3.  **API and Search Lambda function setup**:  To create and deploy these Lambda functions, it is recommended to use the AWS Cloud9 IDE for ease of use, and its built-in management capabilities for serverless applications using AWS Serverless Application Model (SAM).
+      - **VPC note**:  both Lambda functions must be associated with a VPC because they need to communicate with ElastiCache Redis.  If you are using SAM either with Cloud9 or separately, see the file ```template.yaml``` in this repository for an example of VPC configuration.  Be sure the security group you specify for the Lambda functions is the same as the one for the ElastiCache Redis cluster.  
       - **API Lambda function**:  From the API directory of this repository, copy the Lambda function code.  Create a new Lambda function with a blank template and paste the copied code into the code editor. In the code, change the Redis endpoint URL to the Primary Endpoint URL of your ElastiCache Redis.  The line to be changed is as follows, where you replace the angle brackets and URL inside them:
       ```
       r = redis.StrictRedis(host='<your_Redis_URL>', port=6379, db=0, decode_responses=True)
